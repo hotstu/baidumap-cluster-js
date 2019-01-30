@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>your title</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+        html,
+        body,
+        #map {
+            width: 100%;
+            height: 100%;
+            background-color: antiquewhite;
+        }
+    </style>
+    <!--扩展组件/第三方/工程css---->
+    <!-- <script type="text/javascript" src="js/bdmap1.4.js"></script> -->
+</head>
+
+<body>
+    <div id="map"></div>
+    <!--页面html-->
+    <script src="js/clusterv2.js"></script>
+    <script>
+        //百度地图API功能
+        function loadJScript(callback) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.src = "http://api.map.baidu.com/api?v=2.0&ak=" + "8tR9rUIK1uSzpMsPBVRvCbcpvKcHrZ5n" + "&callback=maploaded";
+                document.body.appendChild(script);
+                window.maploaded = callback;
+            
+        }
+        window.onload = function () {
+            loadJScript(function () {
+                var map = new BMap.Map("map",
+                    { enableMapClick: false }
+                );    // 创建Map实例
+                var point = new BMap.Point(116.404, 39.915);
+                map.centerAndZoom(point, 15);  // 初始化地图,设置中心点坐标和地图级别
+                //map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+                //map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+                map.enableScrollWheelZoom(true);
+                var mgr = new ClusterMgr();
+                mgr.init(map, new GenericAlgorithm(mgr), new GenericRender(mgr));
+                var pt;
+                var i = 0;
+                var MAX = 1000;
+                for (; i < MAX; i++) {
+                    pt = new BMap.Point(Math.random() * 40 + 85, Math.random() * 30 + 21);
+                    mgr.addPoint(pt);
+                }
+            })
+
+        }
+    </script>
+</body>
+
+</html>
